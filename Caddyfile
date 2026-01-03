@@ -1,0 +1,62 @@
+# Fixed Caddyfile for Plane on Railway
+# Adds missing /live/* route for WebSocket collaboration
+
+# global options
+{
+	admin off
+	persist_config off
+	auto_https off
+	log {
+		format json
+	}
+	servers {
+		trusted_proxies static private_ranges 100.0.0.0/8
+	}
+}
+
+:{$PORT} {
+	log {
+		format json
+	}
+
+	reverse_proxy /* {$WEB_ENDPOINT} {
+		header_up Host {upstream_hostport}
+	}
+
+	# FIXED: Live service for WebSocket collaboration (Pages editor)
+	handle /live/* {
+		reverse_proxy {$LIVE_ENDPOINT} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	handle /god-mode/* {
+		reverse_proxy {$ADMIN_ENDPOINT} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	handle /api/* {
+		reverse_proxy {$API_ENDPOINT} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	handle /auth/* {
+		reverse_proxy {$API_ENDPOINT} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	handle /spaces/* {
+		reverse_proxy {$SPACES_ENDPOINT} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	handle /{$BUCKET_NAME}/* {
+		reverse_proxy {$BUCKET_ENDPOINT} {
+			header_up Host {upstream_hostport}
+		}
+	}
+}
