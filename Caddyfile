@@ -1,5 +1,6 @@
 # Fixed Caddyfile for Plane on Railway
 # Adds missing /live/* route for WebSocket collaboration
+# Updated: 2026-01-04 - WebSocket header forwarding for Live service auth
 
 # global options
 {
