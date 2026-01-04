@@ -24,9 +24,15 @@
 	}
 
 	# FIXED: Live service for WebSocket collaboration (Pages editor)
+	# Explicitly forward WebSocket upgrade headers and auth cookies
 	handle /live/* {
 		reverse_proxy {$LIVE_ENDPOINT} {
 			header_up Host {upstream_hostport}
+			header_up Connection {http.request.header.Connection}
+			header_up Upgrade {http.request.header.Upgrade}
+			header_up Cookie {http.request.header.Cookie}
+			header_up Authorization {http.request.header.Authorization}
+			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 
