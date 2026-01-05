@@ -77,9 +77,18 @@
 		}
 	}
 
+	# Bucket routes - handle both exact /uploads and /uploads/*
+	handle /{$BUCKET_NAME} {
+		reverse_proxy {$BUCKET_ENDPOINT} {
+			header_up Host bucket.railway.internal:9000
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto https
+		}
+	}
+
 	handle /{$BUCKET_NAME}/* {
 		reverse_proxy {$BUCKET_ENDPOINT} {
-			header_up Host {http.request.host}
+			header_up Host bucket.railway.internal:9000
 			header_up X-Forwarded-Host {http.request.host}
 			header_up X-Forwarded-Proto https
 		}
