@@ -20,6 +20,11 @@
 		format json
 	}
 
+	# Allow large file uploads (25 MB to accommodate 20 MB limit + overhead)
+	request_body {
+		max_size 25MB
+	}
+
 	reverse_proxy /* {$WEB_ENDPOINT} {
 		header_up Host {http.request.host}
 		header_up X-Forwarded-Host {http.request.host}
