@@ -1,6 +1,6 @@
 # Fixed Caddyfile for Plane on Railway
 # Adds missing /live/* route for WebSocket collaboration
-# Updated: 2026-01-05 - Fix Host header forwarding for uploads
+# Updated: 2026-01-05 - Fix Host header & HTTPS protocol forwarding
 
 # global options
 {
@@ -23,7 +23,7 @@
 	reverse_proxy /* {$WEB_ENDPOINT} {
 		header_up Host {http.request.host}
 		header_up X-Forwarded-Host {http.request.host}
-		header_up X-Forwarded-Proto {http.request.scheme}
+		header_up X-Forwarded-Proto https
 	}
 
 	# FIXED: Live service for WebSocket collaboration (Pages editor)
@@ -32,7 +32,7 @@
 		reverse_proxy {$LIVE_ENDPOINT} {
 			header_up Host {http.request.host}
 			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Forwarded-Proto {http.request.scheme}
+			header_up X-Forwarded-Proto https
 			header_up Connection {http.request.header.Connection}
 			header_up Upgrade {http.request.header.Upgrade}
 			header_up Cookie {http.request.header.Cookie}
@@ -44,7 +44,7 @@
 		reverse_proxy {$ADMIN_ENDPOINT} {
 			header_up Host {http.request.host}
 			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Forwarded-Proto {http.request.scheme}
+			header_up X-Forwarded-Proto https
 		}
 	}
 
@@ -52,7 +52,7 @@
 		reverse_proxy {$API_ENDPOINT} {
 			header_up Host {http.request.host}
 			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Forwarded-Proto {http.request.scheme}
+			header_up X-Forwarded-Proto https
 		}
 	}
 
@@ -60,7 +60,7 @@
 		reverse_proxy {$API_ENDPOINT} {
 			header_up Host {http.request.host}
 			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Forwarded-Proto {http.request.scheme}
+			header_up X-Forwarded-Proto https
 		}
 	}
 
@@ -68,7 +68,7 @@
 		reverse_proxy {$SPACES_ENDPOINT} {
 			header_up Host {http.request.host}
 			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Forwarded-Proto {http.request.scheme}
+			header_up X-Forwarded-Proto https
 		}
 	}
 
@@ -76,7 +76,7 @@
 		reverse_proxy {$BUCKET_ENDPOINT} {
 			header_up Host {http.request.host}
 			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Forwarded-Proto {http.request.scheme}
+			header_up X-Forwarded-Proto https
 		}
 	}
 }
