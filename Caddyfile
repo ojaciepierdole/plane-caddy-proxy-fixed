@@ -1,6 +1,6 @@
 # Fixed Caddyfile for Plane on Railway
 # Adds missing /live/* route for WebSocket collaboration
-# Updated: 2026-01-04 - WebSocket header forwarding for Live service auth
+# Updated: 2026-01-05 - Fix Host header forwarding for uploads
 
 # global options
 {
@@ -21,49 +21,62 @@
 	}
 
 	reverse_proxy /* {$WEB_ENDPOINT} {
-		header_up Host {upstream_hostport}
+		header_up Host {http.request.host}
+		header_up X-Forwarded-Host {http.request.host}
+		header_up X-Forwarded-Proto {http.request.scheme}
 	}
 
 	# FIXED: Live service for WebSocket collaboration (Pages editor)
 	# Explicitly forward WebSocket upgrade headers and auth cookies
 	handle /live/* {
 		reverse_proxy {$LIVE_ENDPOINT} {
-			header_up Host {upstream_hostport}
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto {http.request.scheme}
 			header_up Connection {http.request.header.Connection}
 			header_up Upgrade {http.request.header.Upgrade}
 			header_up Cookie {http.request.header.Cookie}
 			header_up Authorization {http.request.header.Authorization}
-			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 
 	handle /god-mode/* {
 		reverse_proxy {$ADMIN_ENDPOINT} {
-			header_up Host {upstream_hostport}
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 
 	handle /api/* {
 		reverse_proxy {$API_ENDPOINT} {
-			header_up Host {upstream_hostport}
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 
 	handle /auth/* {
 		reverse_proxy {$API_ENDPOINT} {
-			header_up Host {upstream_hostport}
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 
 	handle /spaces/* {
 		reverse_proxy {$SPACES_ENDPOINT} {
-			header_up Host {upstream_hostport}
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 
 	handle /{$BUCKET_NAME}/* {
 		reverse_proxy {$BUCKET_ENDPOINT} {
-			header_up Host {upstream_hostport}
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto {http.request.scheme}
 		}
 	}
 }
