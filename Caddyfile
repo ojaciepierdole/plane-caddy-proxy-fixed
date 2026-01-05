@@ -61,6 +61,23 @@
 		}
 	}
 
+	# File uploads endpoint - route to API backend
+	handle /uploads {
+		reverse_proxy {$API_ENDPOINT} {
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto https
+		}
+	}
+
+	handle /uploads/* {
+		reverse_proxy {$API_ENDPOINT} {
+			header_up Host {http.request.host}
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Forwarded-Proto https
+		}
+	}
+
 	handle /auth/* {
 		reverse_proxy {$API_ENDPOINT} {
 			header_up Host {http.request.host}
